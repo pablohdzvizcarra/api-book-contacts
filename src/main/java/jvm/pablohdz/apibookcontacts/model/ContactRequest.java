@@ -19,12 +19,11 @@ public class ContactRequest
     private String username;
 
     @Pattern(
-            regexp = "[8][0-9]{10}",
-            message = "the number must be valid to Mexico format example: 8711001133"
+            regexp = "[0-9]{10}",
+            message = "the phone number length must be equal to ten characters"
     )
     private String phoneNumber;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "the phone type cannot be null")
     private String phoneType;
 }
