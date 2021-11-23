@@ -10,23 +10,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
+import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.DefaultResponse;
+import jvm.pablohdz.apibookcontacts.service.ContactService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/contact")
+@RequiredArgsConstructor
 public class ContactController
 {
+    private final ContactService contactService;
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody ContactRequest request)
     {
-        return ResponseEntity.ok(request);
+        ContactDto data = contactService.save(request);
+
+        return ResponseEntity.ok(DefaultResponse.builder()
+                .timeStamp(LocalDateTime.now())
+                .data(Map.of("contact", data))
+                .message("contact saved")
+                .developerMessage("the contact is created successfully")
+                .status(HttpStatus.CREATED)
+                .statusCode(HttpStatus.CREATED.value())
+                .build()
+        );
     }
 
 
