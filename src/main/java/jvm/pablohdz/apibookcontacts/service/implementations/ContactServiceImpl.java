@@ -13,6 +13,7 @@ import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import jvm.pablohdz.apibookcontacts.service.exceptions.ContactIsNotExists;
@@ -51,6 +52,30 @@ public class ContactServiceImpl implements ContactService {
     public void delete(Long id) {
         doContactExist(id);
         contactRepository.deleteById(id);
+    }
+
+    @Override
+    public ContactDto update(ContactRequestWitId request) {
+        Contact foundContact = doContactExist(request);
+        Contact contact = updateContact(request, foundContact);
+        return contactMapper.contactToContactDto(contact);
+    }
+
+    @NotNull
+    private Contact updateContact(ContactRequestWitId request, Contact foundContact) {
+        foundContact.setName(request.getUsername());
+        foundContact.setPhoneType(request.getPhoneType());
+        foundContact.setPhoneNumber(request.getPhoneNumber());
+        return contactRepository.save(foundContact);
+    }
+
+    private Contact doContactExist(ContactRequestWitId request) {
+        Long id = request.getId();
+        Optional<Contact> optionalContact = contactRepository.findById(id);
+        if (optionalContact.isEmpty())
+            throw new ContactIsNotExists("The user with the id: " + id + " is not exist");
+
+        return optionalContact.get();
     }
 
     private void doContactExist(Long id) {
