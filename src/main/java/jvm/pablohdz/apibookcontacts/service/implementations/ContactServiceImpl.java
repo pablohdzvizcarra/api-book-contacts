@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
@@ -28,11 +32,21 @@ public class ContactServiceImpl implements ContactService
     }
 
     @Override
-    public ContactDto save(@NotNull ContactRequest request)
+    public ContactDto create(@NotNull ContactRequest request)
     {
         Contact contact = createContact(request);
         Contact contactSaved = saveContact(contact);
         return contactMapper.contactToContactDto(contactSaved);
+    }
+
+    @Override
+    public Collection<ContactDto> read()
+    {
+        List<Contact> contactList = contactRepository.findAll();
+
+        return contactList.stream()
+                .map(contactMapper::contactToContactDto)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @NotNull

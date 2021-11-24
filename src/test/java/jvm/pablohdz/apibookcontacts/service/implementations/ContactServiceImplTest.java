@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
@@ -44,7 +46,7 @@ class ContactServiceImplTest
         given(contactMapper.contactToContactDto(createFullContact()))
                 .willReturn(createFullContactDto());
 
-        ContactDto dto = contactService.save(new ContactRequest(
+        ContactDto dto = contactService.create(new ContactRequest(
                 "james",
                 "8744125672",
                 "mobile"
@@ -53,6 +55,20 @@ class ContactServiceImplTest
         assertThat(dto)
                 .isNotNull()
                 .hasNoNullFieldsOrProperties();
+    }
+
+    @Test
+    void whenReadContacts_thenReturnCollectionContacts()
+    {
+        given(contactRepository.findAll())
+                .willReturn(List.of(createFullContact(), createFullContact()));
+        given(contactMapper.contactToContactDto(createFullContact()))
+                .willReturn(createFullContactDto());
+
+        Collection<ContactDto> list = contactService.read();
+
+        assertThat(list.size() > 0)
+                .isTrue();
     }
 
     @NotNull
