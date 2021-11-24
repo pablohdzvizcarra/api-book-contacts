@@ -1,5 +1,6 @@
 package jvm.pablohdz.apibookcontacts.service.implementations;
 
+import org.assertj.core.api.Condition;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import jvm.pablohdz.apibookcontacts.service.exceptions.ContactIsNotExists;
@@ -45,7 +47,7 @@ class ContactServiceImplTest {
         given(contactRepository.save(any()))
                 .willReturn(createFullContact());
         given(contactMapper.contactToContactDto(createFullContact()))
-                .willReturn(createFullContactDto());
+                .willReturn(createContactDto());
 
         ContactDto dto = contactService.create(new ContactRequest(
                 "james",
@@ -63,7 +65,7 @@ class ContactServiceImplTest {
         given(contactRepository.findAll())
                 .willReturn(List.of(createFullContact(), createFullContact()));
         given(contactMapper.contactToContactDto(createFullContact()))
-                .willReturn(createFullContactDto());
+                .willReturn(createContactDto());
 
         Collection<ContactDto> list = contactService.read();
 
@@ -89,8 +91,41 @@ class ContactServiceImplTest {
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void givenBadRequest_whenUpdateContact_thenThrowException() {
+        given(contactRepository.findById(1L))
+                .willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> contactService.update(createContactRequestId()))
+                .isInstanceOf(ContactIsNotExists.class);
+    }
+
+    @Test
+    void givenRequest_whenUpdateContact_thenReturnDto() {
+        Contact contactFound = createFullContact();
+        given(contactRepository.findById(1L))
+                .willReturn(Optional.of(contactFound));
+        given(contactRepository.save(contactFound))
+                .willReturn(createFullContact());
+        given(contactMapper.contactToContactDto(any()))
+                .willReturn(createContactDto());
+
+        ContactDto contact = contactService.update(createContactRequestId());
+
+        assertThat(contact)
+                .withFailMessage("the contact cannot be null")
+                .isNotNull();
+    }
+
     @NotNull
-    private ContactDto createFullContactDto() {
+    private ContactRequestWitId createContactRequestId() {
+        return new ContactRequestWitId(1L, "apache",
+                "8756903456", "mobile"
+        );
+    }
+
+    @NotNull
+    private ContactDto createContactDto() {
         return new ContactDto(
                 1L, "james", "8721569078", "mobile",
                 LocalDateTime.now().toString(), LocalDateTime.now().toString()

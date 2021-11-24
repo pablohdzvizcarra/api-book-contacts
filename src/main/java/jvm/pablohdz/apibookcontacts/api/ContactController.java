@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import javax.validation.constraints.Min;
 
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.model.DefaultResponse;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +79,20 @@ public class ContactController {
                 .message("the contact with the id: " + id + " was deleted")
                 .status(HttpStatus.OK)
                 .reason(HttpStatus.OK.toString())
+                .statusCode(HttpStatus.OK.value())
+                .build());
+    }
+
+    @PatchMapping
+    public ResponseEntity<DefaultResponse> update(@RequestBody @Valid ContactRequestWitId request) {
+
+        ContactDto dto = contactService.update(request);
+        return ResponseEntity.ok(DefaultResponse.builder()
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
+                .data(Map.of("contact", dto))
+                .message("update contact")
+                .developerMessage("the contact was updated")
+                .status(HttpStatus.OK)
                 .statusCode(HttpStatus.OK.value())
                 .build());
     }
