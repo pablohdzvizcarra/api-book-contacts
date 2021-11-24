@@ -68,8 +68,17 @@ public class ContactController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") @Min(1) Long id) {
-        return ResponseEntity.ok("it's works");
+    public ResponseEntity<DefaultResponse> delete(@PathVariable("id") @Min(1) Long id) {
+        contactService.delete(id);
+        return ResponseEntity.ok(DefaultResponse.builder()
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
+                .developerMessage("one contact is deleted")
+                .data(Map.of())
+                .message("the contact with the id: " + id + " was deleted")
+                .status(HttpStatus.OK)
+                .reason(HttpStatus.OK.toString())
+                .statusCode(HttpStatus.OK.value())
+                .build());
     }
 
 
@@ -104,16 +113,18 @@ public class ContactController {
             errors.put("message", constraintViolation.getMessage());
             errors.put("path", constraintViolation.getPropertyPath().toString());
         });
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(DefaultResponse.builder()
-                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
-                .developerMessage("exception occurred when try validate path variables from the " +
-                        "request")
-                .data(Map.of("error", errors))
-                .message("validations path variables errors")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .reason(HttpStatus.INTERNAL_SERVER_ERROR.toString())
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .build());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(DefaultResponse.builder()
+                        .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
+                        .developerMessage(
+                                "exception occurred when try validate path variables from the " +
+                                        "request")
+                        .data(Map.of("error", errors))
+                        .message("validations path variables errors")
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .reason(HttpStatus.INTERNAL_SERVER_ERROR.toString())
+                        .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .build());
     }
 
 }
