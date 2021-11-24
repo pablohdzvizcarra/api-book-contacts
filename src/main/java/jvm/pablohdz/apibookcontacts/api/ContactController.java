@@ -31,6 +31,7 @@ public class ContactController
     private final ContactService contactService;
 
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> save(@Valid @RequestBody ContactRequest request)
     {
         ContactDto data = contactService.save(request);
@@ -67,7 +68,6 @@ public class ContactController
     )
     {
         Map<String, String> errors = new HashMap<>();
-
         exception.getConstraintViolations().forEach(constraintViolation ->
         {
             errors.put("message", constraintViolation.getMessage());

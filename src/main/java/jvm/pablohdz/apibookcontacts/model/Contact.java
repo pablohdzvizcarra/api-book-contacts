@@ -7,9 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
@@ -31,4 +34,8 @@ public class Contact extends BaseEntity
 
     @Column(name = "contact_type", nullable = false)
     private String phoneType;
+
+    public Contact()
+    {
+    }
 }
