@@ -15,6 +15,6 @@ public class ContactDto
     private String name;
     private String phoneNumber;
     private String phoneType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 }

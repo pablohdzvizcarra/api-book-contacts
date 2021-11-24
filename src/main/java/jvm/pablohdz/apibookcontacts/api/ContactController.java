@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class ContactController
 {
     private final ContactService contactService;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,7 +39,7 @@ public class ContactController
         ContactDto data = contactService.save(request);
 
         return ResponseEntity.ok(DefaultResponse.builder()
-                .timeStamp(LocalDateTime.now())
+                .timeStamp(LocalDateTime.now().format(formatter))
                 .data(Map.of("contact", data))
                 .message("contact saved")
                 .developerMessage("the contact is created successfully")
