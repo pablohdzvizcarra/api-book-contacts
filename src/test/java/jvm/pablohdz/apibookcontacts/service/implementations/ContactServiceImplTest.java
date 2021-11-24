@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
@@ -17,15 +18,17 @@ import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
+import jvm.pablohdz.apibookcontacts.service.exceptions.ContactIsNotExists;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 
 @ExtendWith(MockitoExtension.class)
-class ContactServiceImplTest
-{
+class ContactServiceImplTest {
     ContactService contactService;
     @Mock
     private ContactRepository contactRepository;
@@ -33,14 +36,12 @@ class ContactServiceImplTest
     private ContactMapper contactMapper;
 
     @BeforeEach
-    void setUp()
-    {
+    void setUp() {
         contactService = new ContactServiceImpl(contactRepository, contactMapper);
     }
 
     @Test
-    void givenContact_whenSaveContact()
-    {
+    void givenContact_whenSaveContact() {
         given(contactRepository.save(any()))
                 .willReturn(createFullContact());
         given(contactMapper.contactToContactDto(createFullContact()))
@@ -58,8 +59,7 @@ class ContactServiceImplTest
     }
 
     @Test
-    void whenReadContacts_thenReturnCollectionContacts()
-    {
+    void whenReadContacts_thenReturnCollectionContacts() {
         given(contactRepository.findAll())
                 .willReturn(List.of(createFullContact(), createFullContact()));
         given(contactMapper.contactToContactDto(createFullContact()))
@@ -71,9 +71,26 @@ class ContactServiceImplTest
                 .isTrue();
     }
 
+    @Test
+    void givenInvalidId_whenDelete_thenThrownException() {
+        given(contactRepository.findById(1L))
+                .willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> contactService.delete(1L))
+                .isInstanceOf(ContactIsNotExists.class);
+    }
+
+    @Test
+    void givenCorrectId_whenDelete() {
+        given(contactRepository.findById(1L))
+                .willReturn(Optional.of(createFullContact()));
+
+        assertThatCode(() -> contactService.delete(1L))
+                .doesNotThrowAnyException();
+    }
+
     @NotNull
-    private ContactDto createFullContactDto()
-    {
+    private ContactDto createFullContactDto() {
         return new ContactDto(
                 1L, "james", "8721569078", "mobile",
                 LocalDateTime.now().toString(), LocalDateTime.now().toString()
@@ -81,8 +98,7 @@ class ContactServiceImplTest
     }
 
     @NotNull
-    private Contact createFullContact()
-    {
+    private Contact createFullContact() {
         return new Contact(
                 "james", "8721569078", "mobile");
     }
