@@ -39,7 +39,7 @@ public class ContactController
         ContactDto data = contactService.save(request);
 
         return ResponseEntity.ok(DefaultResponse.builder()
-                .timeStamp(LocalDateTime.now().format(formatter))
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
                 .data(Map.of("contact", data))
                 .message("contact saved")
                 .developerMessage("the contact is created successfully")

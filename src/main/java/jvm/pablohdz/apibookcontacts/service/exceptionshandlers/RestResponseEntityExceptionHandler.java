@@ -23,7 +23,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(DefaultResponse.builder()
-                .timeStamp(LocalDateTime.now().format(formatter))
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
                 .developerMessage("exception because try save duplicated data")
                 .data(Map.of("error", ex.getMessage()))
                 .message("exception occurred")

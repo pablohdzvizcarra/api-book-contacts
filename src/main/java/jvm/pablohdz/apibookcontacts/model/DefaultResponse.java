@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.springframework.http.HttpStatus;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import lombok.Data;
@@ -14,6 +15,8 @@ import lombok.experimental.SuperBuilder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DefaultResponse
 {
+    public static final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
     protected String timeStamp;
     protected int statusCode;
     protected HttpStatus status;
