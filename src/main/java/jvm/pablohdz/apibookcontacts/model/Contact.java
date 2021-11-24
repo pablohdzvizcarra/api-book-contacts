@@ -38,4 +38,11 @@ public class Contact extends BaseEntity
     public Contact()
     {
     }
+
+    public Contact(String name, String phoneNumber, String phoneType)
+    {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.phoneType = phoneType;
+    }
 }

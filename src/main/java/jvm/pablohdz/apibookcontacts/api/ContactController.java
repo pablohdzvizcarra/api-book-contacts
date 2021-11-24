@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class ContactController
 {
     private final ContactService contactService;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
