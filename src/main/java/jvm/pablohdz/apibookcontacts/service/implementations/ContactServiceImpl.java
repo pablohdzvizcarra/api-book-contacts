@@ -13,6 +13,7 @@ import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import jvm.pablohdz.apibookcontacts.service.exceptions.ContactIsNotExists;
@@ -51,6 +52,14 @@ public class ContactServiceImpl implements ContactService {
     public void delete(Long id) {
         doContactExist(id);
         contactRepository.deleteById(id);
+    }
+
+    @Override
+    public ContactDto update(ContactRequestWitId request) {
+        Long id = request.getId();
+        doContactExist(id);
+
+        return null;
     }
 
     private void doContactExist(Long id) {

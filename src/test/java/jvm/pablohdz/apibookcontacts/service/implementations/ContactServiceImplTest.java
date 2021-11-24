@@ -16,6 +16,7 @@ import jvm.pablohdz.apibookcontacts.mapper.ContactMapper;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import jvm.pablohdz.apibookcontacts.service.exceptions.ContactIsNotExists;
@@ -87,6 +88,22 @@ class ContactServiceImplTest {
 
         assertThatCode(() -> contactService.delete(1L))
                 .doesNotThrowAnyException();
+    }
+
+    @Test
+    void givenBadRequest_whenUpdateContact_thenThrowException() {
+        given(contactRepository.findById(1L))
+                .willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> contactService.update(createContactRequestId()))
+                .isInstanceOf(ContactIsNotExists.class);
+    }
+
+    @NotNull
+    private ContactRequestWitId createContactRequestId() {
+        return new ContactRequestWitId(1L, "apache",
+                "8756903456", "mobile"
+        );
     }
 
     @NotNull
