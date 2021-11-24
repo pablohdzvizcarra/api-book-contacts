@@ -12,7 +12,7 @@ book directory
 
 ## 2. Run Project
 
-toodo project
+This project is run with maven, you can run this project in different ways:
 
 ## 3. Developer Process and Libraries
 
