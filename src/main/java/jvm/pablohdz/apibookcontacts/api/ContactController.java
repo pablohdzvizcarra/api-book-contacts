@@ -49,9 +49,10 @@ public class ContactController
     }
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException exception)
+    public ResponseEntity<DefaultResponse> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception
+    )
     {
         HashMap<String, String> errors = new HashMap<>();
 
@@ -59,7 +60,15 @@ public class ContactController
                 .getFieldErrors()
                 .forEach(fieldError ->
                         errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
-        return errors;
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(DefaultResponse.builder()
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
+                .developerMessage("exception occurred when try validate data from the request")
+                .data(Map.of("error", errors))
+                .message("validations errors")
+                .status(HttpStatus.CONFLICT)
+                .reason(HttpStatus.CONFLICT.toString())
+                .statusCode(HttpStatus.CONFLICT.value())
+                .build());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
