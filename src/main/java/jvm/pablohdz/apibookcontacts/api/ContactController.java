@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import javax.validation.constraints.Min;
 
 import jvm.pablohdz.apibookcontacts.model.ContactDto;
 import jvm.pablohdz.apibookcontacts.model.ContactRequest;
+import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 import jvm.pablohdz.apibookcontacts.model.DefaultResponse;
 import jvm.pablohdz.apibookcontacts.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +81,12 @@ public class ContactController {
                 .reason(HttpStatus.OK.toString())
                 .statusCode(HttpStatus.OK.value())
                 .build());
+    }
+
+    @PatchMapping
+    public ResponseEntity<?> update(@RequestBody @Valid ContactRequestWitId request) {
+
+        return ResponseEntity.ok(request);
     }
 
 
