@@ -9,6 +9,12 @@ import jvm.pablohdz.apibookcontacts.model.ContactRequestWitId;
 public interface ContactService {
     ContactDto create(ContactRequest request);
 
+    /**
+     * Read all contacts store in persistence service, if is not exists any contact return an
+     * empty array
+     *
+     * @return a list fo contacts with format dto
+     */
     Collection<ContactDto> read();
 
     /**

@@ -56,10 +56,23 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDto update(ContactRequestWitId request) {
-        Long id = request.getId();
-        doContactExist(id);
+        Contact foundContact = doContactExist(request);
 
-        return null;
+        foundContact.setName(request.getUsername());
+        foundContact.setPhoneType(request.getPhoneType());
+        foundContact.setPhoneNumber(request.getPhoneNumber());
+        Contact contact = contactRepository.save(foundContact);
+
+        return contactMapper.contactToContactDto(contact);
+    }
+
+    private Contact doContactExist(ContactRequestWitId request) {
+        Long id = request.getId();
+        Optional<Contact> optionalContact = contactRepository.findById(id);
+        if (optionalContact.isEmpty())
+            throw new ContactIsNotExists("The user with the id: " + id + " is not exist");
+
+        return optionalContact.get();
     }
 
     private void doContactExist(Long id) {

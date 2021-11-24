@@ -84,9 +84,17 @@ public class ContactController {
     }
 
     @PatchMapping
-    public ResponseEntity<?> update(@RequestBody @Valid ContactRequestWitId request) {
+    public ResponseEntity<DefaultResponse> update(@RequestBody @Valid ContactRequestWitId request) {
 
-        return ResponseEntity.ok(request);
+        ContactDto dto = contactService.update(request);
+        return ResponseEntity.ok(DefaultResponse.builder()
+                .timeStamp(LocalDateTime.now().format(DefaultResponse.formatter))
+                .data(Map.of("contact", dto))
+                .message("update contact")
+                .developerMessage("the contact was updated")
+                .status(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
+                .build());
     }
 
 
