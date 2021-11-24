@@ -57,13 +57,16 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDto update(ContactRequestWitId request) {
         Contact foundContact = doContactExist(request);
+        Contact contact = updateContact(request, foundContact);
+        return contactMapper.contactToContactDto(contact);
+    }
 
+    @NotNull
+    private Contact updateContact(ContactRequestWitId request, Contact foundContact) {
         foundContact.setName(request.getUsername());
         foundContact.setPhoneType(request.getPhoneType());
         foundContact.setPhoneNumber(request.getPhoneNumber());
-        Contact contact = contactRepository.save(foundContact);
-
-        return contactMapper.contactToContactDto(contact);
+        return contactRepository.save(foundContact);
     }
 
     private Contact doContactExist(ContactRequestWitId request) {
