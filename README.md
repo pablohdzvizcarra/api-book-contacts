@@ -48,12 +48,50 @@ the jar file after created is inside the folder target
 
 ## 3. Documentation
 
-### 3.1 Swagger
+### 3.1 End-Points
+
+The app have a four endpoint at this moment
+
+#### Create contact
+
+```shell
+POST http://host:port/api/contact/save
+
+```
+
+#### Read contacts
+
+```shell
+GET http://host:port/api/contact
+```
+
+#### Update contact
+
+```shell
+PATCH http://host:port/api/contact
+
+```
+
+#### Delete contact
+
+```shell
+DELETE http://host:port/api/contact/{id}
+```
+
+the **id** is a parameter, you have to provided it in the URL.
+
+### 3.2 Swagger
 
 This project has an implementation documentation by swagger,which you can see in this
 link:
 
-### 3.2 Entity
+### 3.3 Postman
+
+The project have a postman collection
+
+[postman documentation](https://documenter.getpostman.com/view/11724674/UVJZoJGU)
+
+### 3.4 Entities
 
 We have some entities to handle data provided from the request and data to response to the
 client.
@@ -70,7 +108,8 @@ Contact
   "updatedAt": "24-11-2021 09:38"
 }
 ```
-### 3.3 Response
+
+### 3.5 Response
 
 we handle a universal response for all API with this format example saved user:
 
@@ -96,6 +135,7 @@ we handle a universal response for all API with this format example saved user:
 
 The property data in the response always change depending on the endpoint to you call
 response when error is occurred:
+
 ```json
 {
   "timeStamp": "24-Nov-2021 09:43",
@@ -110,9 +150,30 @@ response when error is occurred:
 }
 ```
 
-### 3.4 Request
+### 3.6 Request
 
+create user
 
+```json
+{
+  "username": "john",
+  "phoneNumber": "552678456",
+  "phoneType": "mobile"
+}
+```
+
+update user
+
+```json
+{
+  "id": 1,
+  "username": "john",
+  "phoneNumber": "552678456",
+  "phoneType": "mobile"
+}
+```
+
+if some data is not provided in the request, return error with message
 
 ## 4. Developer Process and Libraries
 
@@ -131,10 +192,20 @@ you can see this process with Notion file in this link:
 - AssertJ: tests more structured
 - Javax Validations: bean validation for fields in the request data
 
-## 5. Docker
-
 ## 6. Testing / CI
 
+**CI Pipeline** GitHub Action name
+
+This project has Continuos Delivery (CI) through a GitHub Action, this action simply runs
+the test and makes sure that the test always pass.
+
+The GitHub Action **CI Pipeline** will be triggered every time a pull request is made to
+the main branch of the project.
+
 ## 7. Flow Chart
+
+Basic flow chart
+
+![example](https://objectstorage.us-phoenix-1.oraclecloud.com/p/-urVeoj3kC_2n7bSv6-ZsVrusA5gBL73fpeZ401DCkxkjz8ViBS59YdPk0RyqBRm/n/axpnfrotfkdm/b/oci-bucket/o/book%20contact%20flowchart.jpg)
 
 ## 8. Extras
