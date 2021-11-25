@@ -85,6 +85,10 @@ the **id** is a parameter, you have to provided it in the URL.
 This project has an implementation documentation by swagger,which you can see in this
 link:
 
+```shell
+http://host:port/swagger-ui/index.html
+```
+
 ### 3.3 Postman
 
 The project have a postman collection
@@ -192,20 +196,18 @@ you can see this process with Notion file in this link:
 - AssertJ: tests more structured
 - Javax Validations: bean validation for fields in the request data
 
-## 6. Testing / CI
+## 5. Testing / CI
 
 **CI Pipeline** GitHub Action name
 
-This project has Continuos Delivery (CI) through a GitHub Action, this action simply runs
+This project has Continuous Delivery (CI) through a GitHub Action, this action simply runs
 the test and makes sure that the test always pass.
 
 The GitHub Action **CI Pipeline** will be triggered every time a pull request is made to
 the main branch of the project.
 
-## 7. Flow Chart
+## 6. Flow Chart
 
 Basic flow chart
 
 ![example](https://objectstorage.us-phoenix-1.oraclecloud.com/p/-urVeoj3kC_2n7bSv6-ZsVrusA5gBL73fpeZ401DCkxkjz8ViBS59YdPk0RyqBRm/n/axpnfrotfkdm/b/oci-bucket/o/book%20contact%20flowchart.jpg)
-
-## 8. Extras

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jvm.pablohdz.apibookcontacts.model.Contact;
 import jvm.pablohdz.apibookcontacts.repository.ContactRepository;
 
-@Configuration
+
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent>
 {
     private boolean ALREADY_SETUP = false;
